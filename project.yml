@@ -17,8 +17,14 @@ targets:
   Chalk:
     type: application
     platform: iOS
+    info:
+      path: Chalk/Info.plist
+      properties:
+        UILaunchScreen:
+          UIColorName: Chalkboard
     sources:
       - path: Chalk
+        excludes: [Info.plist]
       - path: Routine
         type: folder
         buildPhase: resources
@@ -29,7 +35,6 @@ targets:
         CURRENT_PROJECT_VERSION: "1"
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: Chalk
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         DEVELOPMENT_LANGUAGE: es

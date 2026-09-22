@@ -14,3 +14,6 @@ build/
 
 # Generado por XcodeGen desde project.yml
 Chalk.xcodeproj/
+
+# Fuentes con licencia propia (no redistribuibles). Opcional: Chalk/Resources/Fonts/*.otf
+Chalk/Resources/Fonts/

@@ -9,6 +9,7 @@ struct RootView: View {
     @State private var selectedTab = AppTab.today
     @State private var isCheckInPresented = false
     @State private var isOnboarding = false
+    @State private var isShowingSplash = true
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -23,6 +24,15 @@ struct RootView: View {
             }
         }
         .tabBarMinimizeBehavior(.onScrollDown)
+        .overlay {
+            if isShowingSplash {
+                SplashView {
+                    isShowingSplash = false
+                    isOnboarding = profiles.isEmpty
+                    checkWeekly()
+                }
+            }
+        }
         .fullScreenCover(isPresented: $isOnboarding) {
             OnboardingWizard()
         }
@@ -42,7 +52,7 @@ struct RootView: View {
             #endif
         }
         .onChange(of: profiles.isEmpty, initial: true) { _, isEmpty in
-            isOnboarding = isEmpty
+            isOnboarding = isEmpty && !isShowingSplash
         }
         .onChange(of: scenePhase, initial: true) { _, phase in
             if phase == .active { checkWeekly() }
@@ -50,7 +60,7 @@ struct RootView: View {
     }
 
     private func checkWeekly() {
-        guard !isOnboarding, let profile = profiles.first, profile.needsWeeklyCheckIn() else { return }
+        guard !isShowingSplash, !isOnboarding, let profile = profiles.first, profile.needsWeeklyCheckIn() else { return }
         isCheckInPresented = true
     }
 }

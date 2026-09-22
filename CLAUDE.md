@@ -72,6 +72,7 @@ La app lee `Routine/routine.json` del bundle; si no existe usa `routine.example.
 ## Reglas del repo
 
 - **Nunca commitees** `Routine/routine.json` ni `Routine/media/`.
+- **Nunca commitees** `Chalk/Resources/Fonts/`: son fuentes con licencia propia. El splash cae a Chalkduster si no están.
 - **No quites los créditos** a ExerciseGymGifsDB (README y pantalla Acerca de). Los GIFs pertenecen a sus autores.
 - Código: SwiftUI nativo, sin dependencias de terceros, `@Observable` y SwiftData, un tipo por archivo, carpetas por feature (`Chalk/Features/...`).
 - Colores en `Chalk/Resources/Assets.xcassets`: `Lime` (acento), `Lavender` (extras), `Canvas`/`Surface` (fondos).

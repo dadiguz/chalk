@@ -29,4 +29,11 @@ Los GIFs e instrucciones de ejercicios provienen de **[ExerciseGymGifsDB](https:
 Según ese proyecto, los GIFs pertenecen a sus respectivos autores y ni ExerciseGymGifsDB ni Chalk poseen derechos sobre ellos.
 Por eso este repo no incluye los GIFs: cada persona los descarga localmente para su uso personal.
 
+### Fuente del splash
+
+El splash escribe "Chalk" a mano, trazo por trazo, con una técnica inspirada en [Tegaki](https://github.com/gkurt/tegaki) de Gokhan Kurt:
+cada letra se rasteriza, se reduce a su esqueleto con el algoritmo de Zhang-Suen y se dibuja en orden de escritura.
+Si pones una fuente en `Chalk/Resources/Fonts/` (ignorada por git) con el nombre PostScript `RealChalk`, se usa esa;
+si no, se usa Chalkduster, que viene con iOS. Real Chalk es de [JSH Creates](https://www.jshcreates.com/) y su licencia no permite redistribuirla.
+
 Las calorías mostradas son una estimación (MET 5.0 × peso corporal × tiempo estimado), no una medición.

@@ -5,6 +5,10 @@ import SwiftUI
 struct ChalkApp: App {
     @State private var store = RoutineStore()
 
+    init() {
+        FontRegistry.registerBundledFonts()
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView()
