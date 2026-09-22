@@ -48,8 +48,18 @@ Los GIFs e instrucciones vienen de [ExerciseGymGifsDB](https://github.com/JahelC
    | elevación de talones | calf-raise |
    | sentadilla búlgara | split-squat |
 
-3. Escribe el `id` exacto en `gifId`. Si no hay un equivalente fiel, pon `gifId: null`. **Nunca pongas un GIF de otro ejercicio**: la app muestra "Sin demostración disponible" y eso es mejor que enseñar mal la técnica.
+3. Escribe el `id` exacto en `gifId`. Si no hay un equivalente fiel, busca primero en el catálogo propio (`Catalog/exercises.json`, ids `chalk/...`). Si tampoco está, puedes agregarlo al catálogo (ver abajo) o poner `gifId: null`. **Nunca pongas un GIF de otro ejercicio**: la app muestra "Sin demostración disponible" y eso es mejor que enseñar mal la técnica.
 4. Si dudas entre candidatos, muéstrale 2–3 a la persona con su enlace `.gif` y deja que elija.
+
+### Catálogo propio (`Catalog/`)
+
+Para ejercicios que no existen en ExerciseGymGifsDB. Se commitea y lo comparten todos los usuarios del repo.
+
+- Cada entrada tiene el mismo esquema que el detalle de ExerciseGymGifsDB más `description` e `image`.
+- `id`: `chalk/<slug-en-ingles>`. Escribe descripción e instrucciones propias, claras y en español (4 a 6 pasos).
+- Imagen (GIF animado de preferencia, o imagen fija): guárdala en `Catalog/images/` y llena `author`, `license`, `licenseUrl` y `sourceUrl`, y agrega la fila en `Catalog/CREDITS.md`.
+- Por defecto busca imágenes con licencia libre (Wikimedia Commons CC0, CC BY o CC BY-SA vía su API). Usa imágenes con derechos reservados (por ejemplo, GIFs de Fitcron) solo si el dueño del repo te da la URL explícitamente, y siempre con su crédito.
+- Si no hay imagen fiel, deja el ejercicio sin imagen antes que mostrar uno distinto.
 
 ## 4. Descargar media y validar
 
@@ -74,7 +84,8 @@ La app lee `Routine/routine.json` del bundle; si no existe usa `routine.example.
 - **Nunca commitees** `Routine/routine.json` ni `Routine/media/`.
 - **Nunca commitees** `Chalk/Resources/Fonts/`: son fuentes con licencia propia. El splash cae a Chalkduster si no están.
 - **No quites los créditos** a ExerciseGymGifsDB (README y pantalla Acerca de). Los GIFs pertenecen a sus autores.
+- Glosario: los temas de `GuideTopic.training` tienen `keywords`; esas palabras se vuelven enlaces en el detalle de ejercicio. Al agregar un término nuevo, dale `key` y `keywords`.
 - Código: SwiftUI nativo, sin dependencias de terceros, `@Observable` y SwiftData, un tipo por archivo, carpetas por feature (`Chalk/Features/...`).
 - Colores en `Chalk/Resources/Assets.xcassets`: `Lime` (acento), `Lavender` (extras), `Canvas`/`Surface` (fondos).
 - Tras agregar archivos Swift, corre `xcodegen generate`.
-- Para revisar pantallas en el simulador (solo Debug): argumentos `-seedDemoData` (historial falso en una instalación limpia), `-tab plan|profile`, `-detail <exerciseId>`, `-profileRoute charts|notes|photos`, `-guide Rutina|"Tu coach"|"La app"`.
+- Para revisar pantallas en el simulador (solo Debug): argumentos `-seedDemoData` (historial falso en una instalación limpia), `-tab plan|profile`, `-detail <exerciseId>`, `-profileRoute charts|notes|photos`, `-glossary <key>` (junto con `-detail`), `-guide Rutina|"Tu coach"|"La app"`.

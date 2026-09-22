@@ -16,6 +16,9 @@ struct ExerciseDetailView: View {
 
     @State private var isEditingWeight = false
     @State private var isAddingNote = false
+    @State private var glossaryEntry: GuideTopic?
+
+    private var glossary: Glossary { Glossary(meta: store.routine.meta) }
 
     init(ref: ExerciseRef) {
         self.ref = ref
@@ -41,6 +44,19 @@ struct ExerciseDetailView: View {
                     Button("Cerrar", systemImage: "xmark", role: .close) { dismiss() }
                 }
             }
+            .environment(\.openURL, OpenURLAction { url in
+                guard let entry = glossary.entry(for: url) else { return .systemAction }
+                glossaryEntry = entry
+                return .handled
+            })
+            .sheet(item: $glossaryEntry) { GlossaryEntrySheet(entry: $0) }
+            #if DEBUG
+            .task {
+                if let key = UserDefaults.standard.string(forKey: "glossary"), let url = URL(string: "\(Glossary.urlScheme)://\(key)") {
+                    glossaryEntry = glossary.entry(for: url)
+                }
+            }
+            #endif
         }
     }
 
@@ -58,7 +74,7 @@ struct ExerciseDetailView: View {
                         .foregroundStyle(location.block.isExtra ? Color(.lavender) : Color.accentColor)
                     Text(exercise.name)
                         .font(.largeTitle.bold())
-                    if let media {
+                    if let media, media.name != exercise.name {
                         Text(media.name)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
@@ -69,7 +85,13 @@ struct ExerciseDetailView: View {
 
                 if let notes = exercise.notes, !notes.isEmpty, notes != "." {
                     section("Indicaciones del coach", systemImage: "quote.bubble") {
-                        Text(notes)
+                        Text(glossary.linkified(notes))
+                    }
+                }
+
+                if let description = media?.description {
+                    section("Descripción", systemImage: "text.alignleft") {
+                        Text(glossary.linkified(description))
                     }
                 }
 
@@ -84,7 +106,7 @@ struct ExerciseDetailView: View {
                                         .font(.subheadline.bold())
                                         .frame(width: 24, height: 24)
                                         .background(Color(.surfaceRaised), in: .circle)
-                                    Text(step)
+                                    Text(glossary.linkified(step))
                                 }
                             }
                         }
@@ -92,7 +114,7 @@ struct ExerciseDetailView: View {
                             muscleChips(media)
                         }
                     } else {
-                        Text("No hay instrucciones para este ejercicio porque no tiene un GIF asociado en ExerciseGymGifsDB. Sigue las indicaciones de tu coach.")
+                        Text("No hay instrucciones para este ejercicio porque no tiene un GIF asociado en ExerciseGymGifsDB ni una entrada en el catálogo de Chalk. Sigue las indicaciones de tu coach.")
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -126,24 +148,51 @@ struct ExerciseDetailView: View {
     }
 
     @ViewBuilder private func demo(_ exercise: RoutineExercise) -> some View {
-        if let url = MediaLibrary.gifURL(for: exercise.gifId) {
-            AnimatedGIFView(url: url, animates: !reduceMotion)
-                .aspectRatio(1, contentMode: .fit)
-                .frame(maxWidth: .infinity)
-                .background(.white)
-                .clipShape(.rect(cornerRadius: 28))
-                .accessibilityLabel("Demostración animada de \(exercise.name)")
+        if let url = MediaLibrary.mediaURL(for: exercise.gifId) {
+            let isIllustration = url.pathExtension.lowercased() != "gif"
+            VStack(alignment: .leading, spacing: 8) {
+                AnimatedGIFView(url: url, animates: !reduceMotion)
+                    .aspectRatio(isIllustration ? 1.4 : 1, contentMode: .fit)
+                    .padding(isIllustration ? 16 : 0)
+                    .frame(maxWidth: .infinity)
+                    .background(.white)
+                    .clipShape(.rect(cornerRadius: 28))
+                    .accessibilityLabel("Demostración de \(exercise.name)")
+                if let image = MediaLibrary.details(for: exercise.gifId)?.image {
+                    credit(image)
+                }
+            }
         } else {
             ContentUnavailableView {
                 Label("Sin demostración disponible", systemImage: "eye.slash")
             } description: {
                 Text(exercise.gifId == nil
                      ? "Este ejercicio no tiene un GIF asociado en ExerciseGymGifsDB."
-                     : "El GIF no está descargado. Corre Scripts/fetch-media.sh y vuelve a compilar.")
+                     : "La imagen no está descargada. Corre Scripts/fetch-media.sh y vuelve a compilar.")
             }
             .frame(maxWidth: .infinity, minHeight: 240)
             .background(Color(.surface), in: .rect(cornerRadius: 28))
         }
+    }
+
+    private func credit(_ image: CatalogImage) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            if let caption = image.caption {
+                Text(caption)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            Group {
+                if let source = image.sourceUrl.flatMap(URL.init(string:)) {
+                    Link("Imagen: \(image.author) · \(image.license) · \(source.host() ?? "fuente")", destination: source)
+                } else {
+                    Text("Imagen: \(image.author) · \(image.license)")
+                }
+            }
+            .font(.caption2)
+            .foregroundStyle(.tertiary)
+        }
+        .padding(.horizontal, 4)
     }
 
     private func prescriptionGrid(_ exercise: RoutineExercise) -> some View {
@@ -161,7 +210,7 @@ struct ExerciseDetailView: View {
 
     private func stat(_ title: String, _ value: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title)
+            Text(glossary.linkified(title))
                 .font(.caption)
                 .foregroundStyle(.secondary)
             Text(value)

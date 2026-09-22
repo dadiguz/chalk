@@ -34,6 +34,17 @@ struct AboutView: View {
                 }
             }
 
+            Section("Catálogo propio") {
+                Text("Los ejercicios sin GIF en ExerciseGymGifsDB tienen descripciones escritas para Chalk. Los GIFs de hip thrust con barra y plancha son de Fitcron, que conserva todos sus derechos.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                if let url = URL(string: "https://fitcron.com") {
+                    Link(destination: url) {
+                        Label("Fitcron", systemImage: "arrow.up.right.square")
+                    }
+                }
+            }
+
             Section("Estimación de calorías") {
                 Text("Las calorías son una aproximación con MET 5.0 de entrenamiento de fuerza × tu peso corporal × el tiempo estimado (series × (45 s + descanso)). No es una medición.")
                     .font(.subheadline)

@@ -1,23 +1,47 @@
 import Foundation
 
-/// Acceso a los GIFs e instrucciones descargados con `Scripts/fetch-media.sh`.
+/// Acceso a la media de cada ejercicio: GIFs de ExerciseGymGifsDB descargados con
+/// `Scripts/fetch-media.sh`, o imágenes del catálogo propio (`Catalog/`).
 enum MediaLibrary {
-    private static let root = Bundle.main.resourceURL?.appending(path: "Routine/media")
+    private static let mediaRoot = Bundle.main.resourceURL?.appending(path: "Routine/media")
+    private static let catalogRoot = Bundle.main.resourceURL?.appending(path: "Catalog")
     private static var detailsCache: [String: ExerciseMediaDetails] = [:]
 
-    static func gifURL(for gifId: String?) -> URL? {
-        guard let gifId, let url = root?.appending(path: "\(gifId).gif"),
+    private static let catalog: [String: ExerciseMediaDetails] = {
+        guard let url = catalogRoot?.appending(path: "exercises.json"),
+              let data = try? Data(contentsOf: url),
+              let catalog = try? JSONDecoder().decode(ExerciseCatalog.self, from: data) else { return [:] }
+        return Dictionary(catalog.exercises.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+    }()
+
+    static func isCatalog(_ mediaId: String?) -> Bool {
+        mediaId?.hasPrefix(ExerciseCatalog.idPrefix) ?? false
+    }
+
+    /// GIF animado de ExerciseGymGifsDB, si está descargado.
+    static func gifURL(for mediaId: String?) -> URL? {
+        guard let mediaId, !isCatalog(mediaId), let url = mediaRoot?.appending(path: "\(mediaId).gif"),
               FileManager.default.fileExists(atPath: url.path) else { return nil }
         return url
     }
 
-    static func details(for gifId: String?) -> ExerciseMediaDetails? {
-        guard let gifId else { return nil }
-        if let cached = detailsCache[gifId] { return cached }
-        guard let url = root?.appending(path: "\(gifId).json"),
+    /// Imagen a mostrar: el GIF o, para el catálogo propio, su imagen fija.
+    static func mediaURL(for mediaId: String?) -> URL? {
+        if let gif = gifURL(for: mediaId) { return gif }
+        guard let file = details(for: mediaId)?.image?.file,
+              let url = catalogRoot?.appending(path: "images/\(file)"),
+              FileManager.default.fileExists(atPath: url.path) else { return nil }
+        return url
+    }
+
+    static func details(for mediaId: String?) -> ExerciseMediaDetails? {
+        guard let mediaId else { return nil }
+        if isCatalog(mediaId) { return catalog[mediaId] }
+        if let cached = detailsCache[mediaId] { return cached }
+        guard let url = mediaRoot?.appending(path: "\(mediaId).json"),
               let data = try? Data(contentsOf: url),
               let details = try? JSONDecoder().decode(ExerciseMediaDetails.self, from: data) else { return nil }
-        detailsCache[gifId] = details
+        detailsCache[mediaId] = details
         return details
     }
 

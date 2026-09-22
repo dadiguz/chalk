@@ -7,7 +7,7 @@ struct ExerciseThumbnail: View {
 
     var body: some View {
         Group {
-            if let url = MediaLibrary.gifURL(for: gifId), let image = GIFDecoder.thumbnail(at: url) {
+            if let url = MediaLibrary.mediaURL(for: gifId), let image = GIFDecoder.thumbnail(at: url) {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFill()

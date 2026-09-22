@@ -4,6 +4,7 @@ App iOS personal y de código abierto para dar seguimiento a tu rutina de gimnas
 un agente la convierte al formato de la app y tú solo marcas lo que haces.
 
 - **Mi día**: ejercicios del día con series, repeticiones, RIR y descanso, ✓ / ✕, peso editable que se vuelve tu default, racha, anillos de progreso, sección de extras que se reacomodan si no los haces, reposición de días en días libres y notas.
+- **Glosario**: RIR, ROM, MYOreps, dropset y demás términos aparecen como enlaces en el detalle de cada ejercicio.
 - **Plan**: tu semana de lunes a domingo, con los ejercicios de cada día en carrusel. Toca uno para ver el GIF animado e instrucciones.
 - **Perfil**: nombre, peso, fotos de progreso con comparador, check-in semanal, log de notas y gráficas (calorías estimadas, adherencia, progresión de carga y peso corporal).
 
@@ -28,6 +29,9 @@ Tu rutina y los GIFs descargados están en `.gitignore`. Sin rutina propia, la a
 Los GIFs e instrucciones de ejercicios provienen de **[ExerciseGymGifsDB](https://github.com/JahelCuadrado/ExerciseGymGifsDB)**, creado por **Jahel Cuadrado**.
 Según ese proyecto, los GIFs pertenecen a sus respectivos autores y ni ExerciseGymGifsDB ni Chalk poseen derechos sobre ellos.
 Por eso este repo no incluye los GIFs: cada persona los descarga localmente para su uso personal.
+
+Los ejercicios que no están en ExerciseGymGifsDB vienen del catálogo propio en `Catalog/`, con descripciones escritas para Chalk
+y GIFs de Fitcron. Los créditos y licencias de cada imagen están en [Catalog/CREDITS.md](Catalog/CREDITS.md).
 
 ### Fuente del splash
 

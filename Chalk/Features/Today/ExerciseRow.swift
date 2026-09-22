@@ -60,7 +60,7 @@ struct ExerciseRow: View {
                         .foregroundStyle(.secondary)
                         .accessibilityLabel("Tiene notas")
                 }
-                if exercise.gifId == nil || MediaLibrary.gifURL(for: exercise.gifId) == nil {
+                if MediaLibrary.mediaURL(for: exercise.gifId) == nil {
                     Label("Sin GIF", systemImage: "eye.slash")
                         .font(.caption)
                         .foregroundStyle(.secondary)

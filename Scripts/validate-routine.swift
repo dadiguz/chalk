@@ -13,6 +13,10 @@ let path = CommandLine.arguments.dropFirst().first.map { URL(fileURLWithPath: $0
 var errors: [String] = []
 var warnings: [String] = []
 
+struct CatalogEntry: Decodable { let id: String }
+struct Catalog: Decodable { let exercises: [CatalogEntry] }
+let catalogIds = Set(((try? JSONDecoder().decode(Catalog.self, from: Data(contentsOf: root.appending(path: "Catalog/exercises.json"))))?.exercises ?? []).map(\.id))
+
 do {
     let routine = try JSONDecoder().decode(Routine.self, from: Data(contentsOf: path))
     let blocks = routine.days + (routine.extras ?? [])
@@ -25,11 +29,13 @@ do {
             if !seen.insert(ex.id).inserted { errors.append("id de ejercicio repetido: \(ex.id)") }
             if ex.id.range(of: "^[a-z0-9-]+$", options: .regularExpression) == nil { errors.append("id inválido: \(ex.id)") }
             if ex.sets < 1 { errors.append("\(ex.id): sets debe ser ≥ 1") }
-            if let gif = ex.gifId {
+            if let gif = ex.gifId, gif.hasPrefix("chalk/") {
+                if !catalogIds.contains(gif) { errors.append("\(ex.name): \(gif) no existe en Catalog/exercises.json") }
+            } else if let gif = ex.gifId {
                 let gifURL = root.appending(path: "Routine/media/\(gif).gif")
                 if !FileManager.default.fileExists(atPath: gifURL.path) { warnings.append("\(ex.name): falta media de \(gif). Corre Scripts/fetch-media.sh") }
             } else {
-                warnings.append("\(ex.name): sin GIF asociado (la app mostrará un aviso)")
+                warnings.append("\(ex.name): sin GIF ni entrada de catálogo (la app mostrará un aviso)")
             }
         }
     }

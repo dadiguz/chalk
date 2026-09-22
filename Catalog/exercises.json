@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "about": "Catálogo propio de Chalk para ejercicios sin GIF en ExerciseGymGifsDB. Descripciones escritas para Chalk; créditos de cada imagen en CREDITS.md.",
+  "exercises": [
+    {
+      "id": "chalk/barbell-hip-thrust",
+      "name": "Hip thrust con barra",
+      "muscle": "glutes",
+      "bodyPart": "legs",
+      "equipment": "barbell",
+      "category": "strength",
+      "secondaryMuscles": [
+        "hamstrings",
+        "adductors"
+      ],
+      "description": "Extensión de cadera con la espalda alta apoyada en un banco y la barra sobre la pelvis. Es de los ejercicios que más trabajan el glúteo mayor en su posición más contraída, y permite cargar mucho peso con poco estrés en la espalda baja. Usa un cojín o protector en la barra para que no lastime la cadera.",
+      "instructions": [
+        "Siéntate en el piso con la parte alta de la espalda (debajo de los omóplatos) contra el borde de un banco y rueda la barra hasta que quede sobre la pelvis, no sobre el abdomen.",
+        "Coloca los pies a la anchura de la cadera, planos, a una distancia en la que las espinillas queden verticales arriba del todo. Sujeta la barra con ambas manos para que no ruede.",
+        "Mete ligeramente la barbilla y mantén las costillas abajo: la mirada va al frente, no al techo.",
+        "Empuja con los talones y extiende la cadera hasta que el tronco y los muslos queden en línea. El banco funciona como bisagra bajo los omóplatos; no arquees la zona lumbar para subir más.",
+        "Aprieta los glúteos 1 segundo arriba y baja controlando hasta casi tocar el piso antes de la siguiente repetición."
+      ],
+      "image": {
+        "file": "barbell-hip-thrust.gif",
+        "caption": "Hip thrust con barra y espalda apoyada en banco.",
+        "author": "Fitcron",
+        "license": "Todos los derechos reservados",
+        "licenseUrl": null,
+        "sourceUrl": "https://fitcron.com/wp-content/uploads/2021/04/10601301-Barbell-Hip-Thrust_Hips_720.gif"
+      }
+    },
+    {
+      "id": "chalk/plank",
+      "name": "Plancha abdominal",
+      "muscle": "abs",
+      "bodyPart": "core",
+      "equipment": "bodyweight",
+      "category": "strength",
+      "secondaryMuscles": [
+        "delts",
+        "glutes"
+      ],
+      "description": "Ejercicio isométrico de estabilidad: el objetivo es que el cuerpo no se mueva. Entrena al abdomen para resistir que la cadera se hunda, que es justo su trabajo al levantar peso. Es mejor sostener menos tiempo con buena posición que llegar al minuto con la espalda arqueada.",
+      "instructions": [
+        "Apoya los antebrazos en el piso con los codos justo debajo de los hombros y las manos al frente.",
+        "Estira las piernas hacia atrás y apóyate en las puntas de los pies, separados a la anchura de la cadera.",
+        "Forma una línea recta de la cabeza a los talones: ni la cadera alta ni hundida.",
+        "Aprieta glúteos y abdomen como si fueran a darte un golpe en el estómago, y empuja el piso con los antebrazos.",
+        "Respira de forma corta y constante sin soltar la tensión. Si la cadera empieza a caer, termina la serie."
+      ],
+      "image": {
+        "file": "plank.gif",
+        "caption": "Plancha sobre antebrazos.",
+        "author": "Fitcron",
+        "license": "Todos los derechos reservados",
+        "licenseUrl": null,
+        "sourceUrl": "https://fitcron.com/wp-content/uploads/2021/04/04631301-Front-Plank_waist-FIX_720.gif"
+      }
+    }
+  ]
+}

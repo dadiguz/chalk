@@ -28,6 +28,9 @@ targets:
       - path: Routine
         type: folder
         buildPhase: resources
+      - path: Catalog
+        type: folder
+        buildPhase: resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.dadiguz.chalk

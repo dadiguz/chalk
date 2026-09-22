@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Descarga el GIF y el detalle (instrucciones en español) de cada gifId de la rutina.
 # Fuente: https://github.com/JahelCuadrado/ExerciseGymGifsDB (vía jsDelivr).
+# Los ids `chalk/...` vienen del catálogo propio (Catalog/) y no se descargan.
 # Uso: Scripts/fetch-media.sh [ruta/a/routine.json]
 set -euo pipefail
 
@@ -16,7 +17,7 @@ ids=$(python3 -c '
 import json,sys
 r=json.load(open(sys.argv[1]))
 blocks=r["days"]+r.get("extras",[])
-print("\n".join(sorted({e["gifId"] for b in blocks for e in b["exercises"] if e.get("gifId")})))
+print("\n".join(sorted({e["gifId"] for b in blocks for e in b["exercises"] if e.get("gifId") and not e["gifId"].startswith("chalk/")})))
 ' "$ROUTINE")
 
 ok=0; fail=0
