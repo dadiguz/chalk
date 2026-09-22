@@ -2,8 +2,6 @@ import SwiftData
 import SwiftUI
 
 struct TodayView: View {
-    let onOpenProfile: () -> Void
-
     @Environment(RoutineStore.self) private var store
     @Environment(\.modelContext) private var context
     @Query private var entries: [WorkoutEntry]
@@ -11,12 +9,12 @@ struct TodayView: View {
     @Query private var settings: [ExerciseSetting]
     @Query(sort: \Note.createdAt) private var notes: [Note]
     @Query(sort: \BodyWeightEntry.date) private var bodyWeights: [BodyWeightEntry]
-    @Query(sort: \ProgressPhoto.date, order: .reverse) private var photos: [ProgressPhoto]
 
     @State private var selectedDate = Calendar.chalk.startOfDay(for: .now)
     @State private var detail: ExerciseRef?
     @State private var isAddingNote = false
     @State private var isPickingMakeup = false
+    @State private var isShowingGuide = false
 
     private let calendar = Calendar.chalk
     private var logger: WorkoutLogger { WorkoutLogger(context: context) }
@@ -83,18 +81,21 @@ struct TodayView: View {
             TodayHeader(
                 streak: planner.streak(today: calendar.startOfDay(for: .now)),
                 date: $selectedDate,
-                avatar: photos.first.flatMap { PhotoStorage.image(for: $0.fileName) },
-                onOpenProfile: onOpenProfile
+                onOpenGuide: { isShowingGuide = true }
             )
         }
         .simultaneousGesture(swipeBetweenDays)
         #if DEBUG
         .task {
             if let id = UserDefaults.standard.string(forKey: "detail") { detail = ExerciseRef(exerciseId: id) }
+            isShowingGuide = UserDefaults.standard.string(forKey: "guide") != nil
         }
         #endif
         .sheet(item: $detail) { ref in
             ExerciseDetailView(ref: ref)
+        }
+        .sheet(isPresented: $isShowingGuide) {
+            GuideView()
         }
         .sheet(isPresented: $isAddingNote) {
             NoteEditorSheet(title: "Nota del día") { text in

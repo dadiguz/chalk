@@ -9,6 +9,7 @@ Tu trabajo más común aquí: **convertir la rutina de la persona (Excel, PDF, f
 
 - Excel: léelo con Python y `openpyxl` (crea un venv en un directorio temporal si no está instalado). Revisa **todas** las hojas; muchas rutinas repiten la misma semana en varias hojas.
 - Identifica: nombre, fecha de inicio, objetivo, notas generales, días (Día 1, Día 2… o Push/Pull/Legs), y por ejercicio: series, repeticiones, RIR/RPE, descanso e indicaciones.
+- Busca tablas y notas al final o a los lados de la hoja: escalas de esfuerzo (RPE/RIR) van en `meta.effortScale`, términos que el coach define (por ejemplo su versión de "MYOreps") en `meta.glossary`, e indicaciones generales en `meta.generalNotes`. La app las muestra en la Guía (engrane de Mi día), pestaña "Tu coach".
 - Busca trabajo "extra" sin día fijo (por ejemplo "abdominales 3 veces por semana"). Va en `extras` con `timesPerWeek`.
 
 ## 2. Escribir `Routine/routine.json`
@@ -75,4 +76,4 @@ La app lee `Routine/routine.json` del bundle; si no existe usa `routine.example.
 - Código: SwiftUI nativo, sin dependencias de terceros, `@Observable` y SwiftData, un tipo por archivo, carpetas por feature (`Chalk/Features/...`).
 - Colores en `Chalk/Resources/Assets.xcassets`: `Lime` (acento), `Lavender` (extras), `Canvas`/`Surface` (fondos).
 - Tras agregar archivos Swift, corre `xcodegen generate`.
-- Para revisar pantallas en el simulador (solo Debug): argumentos `-seedDemoData` (historial falso en una instalación limpia), `-tab plan|profile`, `-detail <exerciseId>`, `-profileRoute charts|notes|photos`.
+- Para revisar pantallas en el simulador (solo Debug): argumentos `-seedDemoData` (historial falso en una instalación limpia), `-tab plan|profile`, `-detail <exerciseId>`, `-profileRoute charts|notes|photos`, `-guide Rutina|"Tu coach"|"La app"`.

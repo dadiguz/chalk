@@ -2,60 +2,238 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Chalk routine",
   "type": "object",
-  "required": ["version", "meta", "days", "schedule"],
+  "required": [
+    "version",
+    "meta",
+    "days",
+    "schedule"
+  ],
   "properties": {
-    "version": { "const": 1 },
+    "version": {
+      "const": 1
+    },
     "meta": {
       "type": "object",
-      "required": ["athlete"],
+      "required": [
+        "athlete"
+      ],
       "properties": {
-        "athlete": { "type": "string" },
-        "startDate": { "type": "string", "format": "date" },
-        "goal": { "type": ["string", "null"] },
-        "generalNotes": { "type": "array", "items": { "type": "string" } }
+        "athlete": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "goal": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "generalNotes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "glossary": {
+          "type": "array",
+          "description": "Términos que define el coach.",
+          "items": {
+            "type": "object",
+            "required": [
+              "term",
+              "description"
+            ],
+            "properties": {
+              "term": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "effortScale": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Escala de esfuerzo del archivo (RPE, RIR…).",
+          "required": [
+            "name",
+            "levels"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "levels": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "description"
+                ],
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
-    "days": { "type": "array", "items": { "$ref": "#/$defs/block" } },
+    "days": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/block"
+      }
+    },
     "extras": {
       "type": "array",
       "items": {
         "allOf": [
-          { "$ref": "#/$defs/block" },
-          { "type": "object", "required": ["timesPerWeek"], "properties": { "timesPerWeek": { "type": "integer", "minimum": 1, "maximum": 7 } } }
+          {
+            "$ref": "#/$defs/block"
+          },
+          {
+            "type": "object",
+            "required": [
+              "timesPerWeek"
+            ],
+            "properties": {
+              "timesPerWeek": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 7
+              }
+            }
+          }
         ]
       }
     },
     "schedule": {
       "type": "object",
       "description": "Cada día de la semana lista ids de days y extras. Un día vacío es día libre (se puede reponer).",
-      "required": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
-      "additionalProperties": { "type": "array", "items": { "type": "string" } }
+      "required": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday"
+      ],
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
     }
   },
   "$defs": {
     "block": {
       "type": "object",
-      "required": ["id", "name", "exercises"],
+      "required": [
+        "id",
+        "name",
+        "exercises"
+      ],
       "properties": {
-        "id": { "type": "string" },
-        "name": { "type": "string" },
-        "focus": { "type": ["string", "null"] },
-        "exercises": { "type": "array", "items": { "$ref": "#/$defs/exercise" } }
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "focus": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "exercises": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/exercise"
+          }
+        }
       }
     },
     "exercise": {
       "type": "object",
-      "required": ["id", "name", "sets", "reps"],
+      "required": [
+        "id",
+        "name",
+        "sets",
+        "reps"
+      ],
       "properties": {
-        "id": { "type": "string", "pattern": "^[a-z0-9-]+$", "description": "Único en todo el archivo y estable: es la llave del historial." },
-        "name": { "type": "string" },
-        "sets": { "type": "integer", "minimum": 1 },
-        "reps": { "type": "string", "description": "Texto libre: \"8 a 10\", \"15\", \"1 min\"." },
-        "rir": { "type": ["string", "null"] },
-        "rest": { "type": ["string", "null"], "description": "\"90 seg\", \"2 min\"." },
-        "notes": { "type": ["string", "null"] },
-        "defaultWeightKg": { "type": ["number", "null"] },
-        "gifId": { "type": ["string", "null"], "pattern": "^[a-z-]+/[a-z0-9-]+$", "description": "id de ExerciseGymGifsDB (<muscle>/<slug>) o null." }
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "Único en todo el archivo y estable: es la llave del historial."
+        },
+        "name": {
+          "type": "string"
+        },
+        "sets": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "reps": {
+          "type": "string",
+          "description": "Texto libre: \"8 a 10\", \"15\", \"1 min\"."
+        },
+        "rir": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "rest": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "\"90 seg\", \"2 min\"."
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "defaultWeightKg": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "gifId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-z-]+/[a-z0-9-]+$",
+          "description": "id de ExerciseGymGifsDB (<muscle>/<slug>) o null."
+        }
       }
     }
   }

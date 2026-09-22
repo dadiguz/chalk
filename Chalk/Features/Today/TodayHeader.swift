@@ -4,8 +4,7 @@ import SwiftUI
 struct TodayHeader: View {
     let streak: Int
     @Binding var date: Date
-    let avatar: UIImage?
-    let onOpenProfile: () -> Void
+    let onOpenGuide: () -> Void
 
     private let calendar = Calendar.chalk
     private var today: Date { calendar.startOfDay(for: .now) }
@@ -18,7 +17,7 @@ struct TodayHeader: View {
                 Spacer(minLength: 0)
                 dateSwitcher
                 Spacer(minLength: 0)
-                profileButton
+                guideButton
             }
         }
         .padding(.horizontal)
@@ -73,24 +72,13 @@ struct TodayHeader: View {
         .glassEffect(.regular.interactive(), in: .capsule)
     }
 
-    private var profileButton: some View {
-        Button(action: onOpenProfile) {
-            Group {
-                if let avatar {
-                    Image(uiImage: avatar)
-                        .resizable()
-                        .scaledToFill()
-                } else {
-                    Image(systemName: "person.crop.circle")
-                        .font(.title2)
-                }
-            }
+    private var guideButton: some View {
+        Button("Guía", systemImage: "gearshape", action: onOpenGuide)
+            .labelStyle(.iconOnly)
+            .font(.title3.weight(.semibold))
             .frame(width: 52, height: 52)
-            .clipShape(.circle)
-        }
-        .buttonStyle(.plain)
-        .glassEffect(.regular.interactive(), in: .circle)
-        .accessibilityLabel("Perfil")
+            .buttonStyle(.plain)
+            .glassEffect(.regular.interactive(), in: .circle)
     }
 
     private var title: String {

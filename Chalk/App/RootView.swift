@@ -13,7 +13,7 @@ struct RootView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab("Mi día", systemImage: "checklist", value: .today) {
-                TodayView { selectedTab = .profile }
+                TodayView()
             }
             Tab("Plan", systemImage: "calendar", value: .plan) {
                 PlanView()
