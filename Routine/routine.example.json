@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "meta": {
+    "athlete": "Atleta de ejemplo",
+    "startDate": "2026-01-05",
+    "goal": "Rutina de ejemplo. Genera la tuya con CLAUDE.md",
+    "generalNotes": ["Esta rutina es un ejemplo para que el proyecto compile sin routine.json."]
+  },
+  "days": [
+    {
+      "id": "day-1", "name": "Día 1", "focus": "Torso",
+      "exercises": [
+        { "id": "press-banca", "name": "Press de banca con barra", "sets": 3, "reps": "6 a 8", "rir": "1 a 2", "rest": "2 min", "notes": "ROM completo.", "defaultWeightKg": 40, "gifId": "pectorals/barbell-bench-press" },
+        { "id": "jalon-pecho", "name": "Jalón al pecho", "sets": 3, "reps": "8 a 10", "rir": "1 a 2", "rest": "90 seg", "notes": null, "defaultWeightKg": null, "gifId": "lats/cable-lat-pulldown-full-range-of-motion" },
+        { "id": "ejercicio-sin-gif", "name": "Ejercicio sin GIF", "sets": 2, "reps": "12", "rir": null, "rest": "60 seg", "notes": "Así se ve un ejercicio sin demostración.", "defaultWeightKg": null, "gifId": null }
+      ]
+    },
+    {
+      "id": "day-2", "name": "Día 2", "focus": "Pierna",
+      "exercises": [
+        { "id": "sentadilla-smith", "name": "Sentadilla en máquina Smith", "sets": 3, "reps": "8 a 10", "rir": "2", "rest": "2 min", "notes": null, "defaultWeightKg": null, "gifId": "glutes/smith-squat" },
+        { "id": "extension-cuadriceps", "name": "Extensión de cuádriceps", "sets": 3, "reps": "12 a 15", "rir": "0 a 1", "rest": "90 seg", "notes": null, "defaultWeightKg": null, "gifId": "quads/lever-leg-extension" }
+      ]
+    }
+  ],
+  "extras": [
+    {
+      "id": "abs", "name": "Abdominales", "timesPerWeek": 2,
+      "exercises": [
+        { "id": "crunch", "name": "Crunch", "sets": 3, "reps": "20", "rir": null, "rest": null, "notes": null, "defaultWeightKg": null, "gifId": "abs/crunch-floor" }
+      ]
+    }
+  ],
+  "schedule": {
+    "monday": ["day-1", "abs"],
+    "tuesday": [],
+    "wednesday": ["day-2"],
+    "thursday": ["abs"],
+    "friday": ["day-1"],
+    "saturday": [],
+    "sunday": []
+  }
+}

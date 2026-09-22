@@ -1,0 +1,16 @@
+# Rutina personal (cada quien genera la suya con CLAUDE.md)
+Routine/routine.json
+Routine/media/
+
+# Xcode
+xcuserdata/
+*.xcuserstate
+DerivedData/
+build/
+*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+
+# macOS
+.DS_Store
+
+# Generado por XcodeGen desde project.yml
+Chalk.xcodeproj/
