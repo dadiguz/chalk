@@ -9,7 +9,6 @@ struct SplashView: View {
     @State private var progress = 0.0
     @State private var isLeaving = false
     @State private var isComplete = false
-    @State private var underlineProgress = 0.0
     @State private var availableWidth = 0.0
 
     private let fontSize = 68.0
@@ -21,27 +20,19 @@ struct SplashView: View {
                 .ignoresSafeArea()
 
             if let layout {
-                VStack(spacing: layout.size.height * 0.02) {
-                    ZStack(alignment: .topLeading) {
-                        layout.textPath
-                            .fill(.white.opacity(0.95))
-                            .mask {
-                                HandwritingMask(strokes: layout.strokes, progress: progress)
-                                    .stroke(.white, style: StrokeStyle(lineWidth: layout.brushWidth, lineCap: .round, lineJoin: .round))
-                            }
-                        // Asegura que la palabra quede completa aunque algún trazo no cubra un borde.
-                        layout.textPath
-                            .fill(.white.opacity(isComplete ? 0.95 : 0))
-                    }
-                    .frame(width: layout.size.width, height: layout.size.height, alignment: .topLeading)
-                    .shadow(color: .white.opacity(0.25), radius: 6)
-
-                    ChalkUnderline()
-                        .frame(width: layout.size.width * 0.84, height: layout.size.height * 0.32)
-                        .mask(alignment: .leading) {
-                            Rectangle().scaleEffect(x: underlineProgress, y: 1, anchor: .leading)
+                ZStack(alignment: .topLeading) {
+                    layout.textPath
+                        .fill(.white.opacity(0.95))
+                        .mask {
+                            HandwritingMask(strokes: layout.strokes, progress: progress)
+                                .stroke(.white, style: StrokeStyle(lineWidth: layout.brushWidth, lineCap: .round, lineJoin: .round))
                         }
+                    // Asegura que la palabra quede completa aunque algún trazo no cubra un borde.
+                    layout.textPath
+                        .fill(.white.opacity(isComplete ? 0.95 : 0))
                 }
+                .frame(width: layout.size.width, height: layout.size.height, alignment: .topLeading)
+                .shadow(color: .white.opacity(0.25), radius: 6)
                 .scaleEffect(fitScale(for: layout) * (isLeaving ? 1.06 : 1))
             }
         }
@@ -60,14 +51,12 @@ struct SplashView: View {
         if reduceMotion {
             progress = 1
             isComplete = true
-            underlineProgress = 1
             try? await Task.sleep(for: .seconds(0.6))
         } else {
             withAnimation(.easeInOut(duration: drawDuration)) { progress = 1 }
             try? await Task.sleep(for: .seconds(drawDuration))
             withAnimation(.easeIn(duration: 0.2)) { isComplete = true }
-            withAnimation(.easeOut(duration: 0.45)) { underlineProgress = 1 }
-            try? await Task.sleep(for: .seconds(0.9))
+            try? await Task.sleep(for: .seconds(0.5))
         }
         finish()
     }
