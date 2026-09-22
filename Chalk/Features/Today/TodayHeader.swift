@@ -44,41 +44,54 @@ struct TodayHeader: View {
     }
 
     private var dateSwitcher: some View {
-        HStack(spacing: 4) {
-            Button("Día anterior", systemImage: "chevron.left") { move(-1) }
-                .labelStyle(.iconOnly)
-                .frame(width: 40, height: 40)
+        HStack(spacing: 0) {
+            arrowButton("Día anterior", systemImage: "chevron.left") { move(-1) }
 
-            VStack(spacing: 0) {
-                Text(title)
-                    .font(.headline)
-                Text(date, format: .dateTime.day().month(.abbreviated).year())
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+            Button {
+                withAnimation(.snappy) { date = today }
+            } label: {
+                VStack(spacing: 0) {
+                    Text(title)
+                        .font(.headline)
+                    Text(date, format: .dateTime.day().month(.abbreviated).year())
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(minWidth: 104, minHeight: 44)
+                .contentShape(.rect)
             }
-            .frame(minWidth: 104)
-            .onTapGesture { withAnimation(.snappy) { date = today } }
-            .accessibilityAddTraits(.isButton)
+            .accessibilityElement(children: .combine)
             .accessibilityHint("Regresa a hoy")
 
-            Button("Día siguiente", systemImage: "chevron.right") { move(1) }
-                .labelStyle(.iconOnly)
-                .frame(width: 40, height: 40)
+            arrowButton("Día siguiente", systemImage: "chevron.right") { move(1) }
                 .disabled(isToday)
         }
         .font(.body.weight(.semibold))
         .buttonStyle(.plain)
-        .padding(6)
+        .padding(4)
         .glassEffect(.regular.interactive(), in: .capsule)
     }
 
+    /// Flecha con área táctil completa de 44 pt (el frame va dentro del label para que cuente al tocar).
+    private func arrowButton(_ title: String, systemImage: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: systemImage)
+                .frame(width: 44, height: 44)
+                .contentShape(.circle)
+        }
+        .accessibilityLabel(title)
+    }
+
     private var guideButton: some View {
-        Button("Guía", systemImage: "gearshape", action: onOpenGuide)
-            .labelStyle(.iconOnly)
-            .font(.title3.weight(.semibold))
-            .frame(width: 52, height: 52)
-            .buttonStyle(.plain)
-            .glassEffect(.regular.interactive(), in: .circle)
+        Button(action: onOpenGuide) {
+            Image(systemName: "gearshape")
+                .font(.title3.weight(.semibold))
+                .frame(width: 52, height: 52)
+                .contentShape(.circle)
+        }
+        .buttonStyle(.plain)
+        .glassEffect(.regular.interactive(), in: .circle)
+        .accessibilityLabel("Guía")
     }
 
     private var title: String {

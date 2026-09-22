@@ -84,11 +84,24 @@ targets:
       base:
         GENERATE_INFOPLIST_FILE: YES
         PRODUCT_BUNDLE_IDENTIFIER: com.dadiguz.chalk.tests
+  ChalkUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [ChalkUITests]
+    dependencies:
+      - target: Chalk
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.dadiguz.chalk.uitests
+        TEST_TARGET_NAME: Chalk
+        SWIFT_DEFAULT_ACTOR_ISOLATION: nonisolated
 schemes:
   Chalk:
     build:
       targets:
         Chalk: all
         ChalkTests: [test]
+        ChalkUITests: [test]
     test:
-      targets: [ChalkTests]
+      targets: [ChalkTests, ChalkUITests]
