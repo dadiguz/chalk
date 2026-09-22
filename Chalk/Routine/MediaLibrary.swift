@@ -34,6 +34,14 @@ enum MediaLibrary {
         return url
     }
 
+    /// Ruta de la media relativa al bundle de la app, para que la Live Activity la lea.
+    static func bundleRelativeMediaPath(for mediaId: String?) -> String? {
+        guard let url = mediaURL(for: mediaId) else { return nil }
+        let base = Bundle.main.bundleURL.standardizedFileURL.path + "/"
+        let path = url.standardizedFileURL.path
+        return path.hasPrefix(base) ? String(path.dropFirst(base.count)) : nil
+    }
+
     static func details(for mediaId: String?) -> ExerciseMediaDetails? {
         guard let mediaId else { return nil }
         if isCatalog(mediaId) { return catalog[mediaId] }

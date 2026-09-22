@@ -15,6 +15,11 @@ struct TodayView: View {
     @State private var isAddingNote = false
     @State private var isPickingMakeup = false
     @State private var isShowingGuide = false
+    @State private var session = WorkoutSession.shared
+    @State private var isShowingSessionError = false
+    #if DEBUG
+    @State private var isShowingActivityPreview = false
+    #endif
 
     private let calendar = Calendar.chalk
     private var logger: WorkoutLogger { WorkoutLogger(context: context) }
@@ -36,6 +41,10 @@ struct TodayView: View {
                     if !missed.isEmpty { MissedDayBanner(blocks: missed) }
                 }
 
+                if isToday, !plan.isEmpty {
+                    sessionCard(planner: planner, plan: plan)
+                }
+
                 if planner.isFreeDay(selectedDate) {
                     FreeDayCard(hasMakeups: !mainBlocks.isEmpty) { isPickingMakeup = true }
                 }
@@ -50,6 +59,7 @@ struct TodayView: View {
                             return exercise.defaultWeightKg
                         },
                         exercisesWithNotes: Set(notes.compactMap(\.exerciseId)),
+                        currentExerciseId: isToday ? session.currentExerciseId : nil,
                         onStatus: { exercise, status in
                             logger.setStatus(status, for: exercise, in: planned.block, on: selectedDate)
                         },
@@ -89,11 +99,36 @@ struct TodayView: View {
         .task {
             if let id = UserDefaults.standard.string(forKey: "detail") { detail = ExerciseRef(exerciseId: id) }
             isShowingGuide = UserDefaults.standard.string(forKey: "guide") != nil
+            if UserDefaults.standard.bool(forKey: "startWorkout"), !session.isRunning {
+                await session.start(day: selectedDate)
+            }
+            if UserDefaults.standard.bool(forKey: "completeCurrent"), let id = session.currentExerciseId {
+                // Mismo camino que el ✓ de la Live Activity (CompleteExerciseIntent).
+                _ = try? await CompleteExerciseIntent(exerciseId: id).perform()
+            }
+            isShowingActivityPreview = UserDefaults.standard.bool(forKey: "liveActivityPreview")
         }
         #endif
         .sheet(item: $detail) { ref in
             ExerciseDetailView(ref: ref)
         }
+        .onChange(of: syncSignature) {
+            guard session.isRunning else { return }
+            Task { await session.refresh() }
+        }
+        .alert("Entrenamiento", isPresented: $isShowingSessionError) {
+            Button("OK", role: .cancel) { session.errorMessage = nil }
+        } message: {
+            Text(session.errorMessage ?? "")
+        }
+        .onChange(of: session.errorMessage) { _, message in
+            isShowingSessionError = message != nil
+        }
+        #if DEBUG
+        .sheet(isPresented: $isShowingActivityPreview) {
+            LiveActivityPreview()
+        }
+        #endif
         .sheet(isPresented: $isShowingGuide) {
             GuideView()
         }
@@ -126,6 +161,30 @@ struct TodayView: View {
             kcalDone: CalorieEstimator.kcal(for: allDone, bodyWeightKg: bodyWeight),
             kcalPlanned: CalorieEstimator.kcal(for: plan.flatMap(\.block.exercises), bodyWeightKg: bodyWeight)
         )
+    }
+
+    /// Cambia cuando se marca, desmarca o cambia el peso de algo; mantiene la Live Activity al día.
+    private var syncSignature: [String] {
+        entries.map { "\($0.day.timeIntervalSince1970)|\($0.exerciseId)|\($0.statusRaw)|\($0.weightKg ?? -1)" }.sorted()
+            + makeups.map { "\($0.day.timeIntervalSince1970)|\($0.blockId)" }.sorted()
+    }
+
+    private func sessionCard(planner: DayPlanner, plan: [PlannedBlock]) -> some View {
+        let queue = WorkoutQueue(plan: plan)
+        let current = queue.current(index: planner.index, day: selectedDate)
+        let resolved = queue.resolvedCount(index: planner.index, day: selectedDate)
+        return Group {
+            if current != nil || session.isRunning {
+                WorkoutSessionCard(
+                    session: session,
+                    currentName: current?.exercise.name,
+                    resolved: resolved,
+                    total: queue.items.count,
+                    onStart: { Task { await session.start(day: selectedDate) } },
+                    onStop: { Task { await session.stop() } }
+                )
+            }
+        }
     }
 
     private var swipeBetweenDays: some Gesture {

@@ -42,6 +42,7 @@ struct RootView: View {
             }
         }
         .task {
+            await WorkoutSession.shared.restore()
             #if DEBUG
             DebugSeeder.seedIfRequested(context: context, store: store)
             switch UserDefaults.standard.string(forKey: "tab") {

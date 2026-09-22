@@ -22,9 +22,11 @@ targets:
       properties:
         UILaunchScreen:
           UIColorName: Chalkboard
+        NSSupportsLiveActivities: true
     sources:
       - path: Chalk
         excludes: [Info.plist]
+      - path: Shared
       - path: Routine
         type: folder
         buildPhase: resources
@@ -46,6 +48,32 @@ targets:
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: ""
+    dependencies:
+      - target: ChalkWidgets
+  ChalkWidgets:
+    type: app-extension
+    platform: iOS
+    info:
+      path: ChalkWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: Chalk
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    sources:
+      - path: ChalkWidgets
+        excludes: [Info.plist]
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dadiguz.chalk.widgets
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) WIDGET_EXTENSION"
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: ""
+        SKIP_INSTALL: YES
   ChalkTests:
     type: bundle.unit-test
     platform: iOS

@@ -7,6 +7,7 @@ struct BlockCard: View {
     let index: EntryIndex
     let weightFor: (RoutineExercise) -> Double?
     let exercisesWithNotes: Set<String>
+    var currentExerciseId: String?
     let onStatus: (RoutineExercise, EntryStatus?) -> Void
     let onBlockStatus: (EntryStatus?) -> Void
     let onWeight: (RoutineExercise, Double?) -> Void
@@ -34,6 +35,7 @@ struct BlockCard: View {
                     status: index.status(of: exercise.id, on: day),
                     weightKg: index.weight(of: exercise.id, on: day) ?? weightFor(exercise),
                     hasNotes: exercisesWithNotes.contains(exercise.id),
+                    isCurrent: exercise.id == currentExerciseId,
                     accent: accent,
                     onAccent: onAccent,
                     onStatus: { onStatus(exercise, $0) },

@@ -5,6 +5,7 @@ struct ExerciseRow: View {
     let status: EntryStatus?
     let weightKg: Double?
     let hasNotes: Bool
+    var isCurrent = false
     var accent: Color = Color(.lime)
     var onAccent: Color = Color(.onLime)
     let onStatus: (EntryStatus?) -> Void
@@ -20,6 +21,15 @@ struct ExerciseRow: View {
                     HStack(spacing: 12) {
                         ExerciseThumbnail(gifId: exercise.gifId)
                         VStack(alignment: .leading, spacing: 3) {
+                            if isCurrent {
+                                Text("Ahora")
+                                    .font(.caption2.bold())
+                                    .textCase(.uppercase)
+                                    .padding(.horizontal, 7)
+                                    .padding(.vertical, 2)
+                                    .foregroundStyle(onAccent)
+                                    .background(accent, in: .capsule)
+                            }
                             Text(exercise.name)
                                 .font(.headline)
                                 .strikethrough(status == .skipped)

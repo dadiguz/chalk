@@ -84,8 +84,9 @@ La app lee `Routine/routine.json` del bundle; si no existe usa `routine.example.
 - **Nunca commitees** `Routine/routine.json` ni `Routine/media/`.
 - **Nunca commitees** `Chalk/Resources/Fonts/`: son fuentes con licencia propia. El splash cae a Chalkduster si no están.
 - **No quites los créditos** a ExerciseGymGifsDB (README y pantalla Acerca de). Los GIFs pertenecen a sus autores.
+- Live Activity: `ChalkWidgets/` (extensión) + `Shared/` (compilado en app y extensión: `WorkoutActivityAttributes`, `CompleteExerciseIntent`, vistas). El intent corre en el proceso de la app y llama a `WorkoutSession`; en la extensión su cuerpo queda vacío por `WIDGET_EXTENSION`. La app y el intent comparten `AppServices.modelContainer`.
 - Glosario: los temas de `GuideTopic.training` tienen `keywords`; esas palabras se vuelven enlaces en el detalle de ejercicio. Al agregar un término nuevo, dale `key` y `keywords`.
 - Código: SwiftUI nativo, sin dependencias de terceros, `@Observable` y SwiftData, un tipo por archivo, carpetas por feature (`Chalk/Features/...`).
 - Colores en `Chalk/Resources/Assets.xcassets`: `Lime` (acento), `Lavender` (extras), `Canvas`/`Surface` (fondos).
 - Tras agregar archivos Swift, corre `xcodegen generate`.
-- Para revisar pantallas en el simulador (solo Debug): argumentos `-seedDemoData` (historial falso en una instalación limpia), `-tab plan|profile`, `-detail <exerciseId>`, `-profileRoute charts|notes|photos`, `-glossary <key>` (junto con `-detail`), `-guide Rutina|"Tu coach"|"La app"`.
+- Para revisar pantallas en el simulador (solo Debug): argumentos `-seedDemoData` (historial falso en una instalación limpia), `-tab plan|profile`, `-detail <exerciseId>`, `-profileRoute charts|notes|photos`, `-glossary <key>` (junto con `-detail`), `-startWorkout YES` (inicia la Live Activity), `-completeCurrent YES` (ejecuta el ✓ de la actividad), `-liveActivityPreview YES` (vista de pantalla de bloqueo en la app), `-guide Rutina|"Tu coach"|"La app"`.

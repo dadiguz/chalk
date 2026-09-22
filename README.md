@@ -5,6 +5,7 @@ un agente la convierte al formato de la app y tú solo marcas lo que haces.
 
 - **Mi día**: ejercicios del día con series, repeticiones, RIR y descanso, ✓ / ✕, peso editable que se vuelve tu default, racha, anillos de progreso, sección de extras que se reacomodan si no los haces, reposición de días en días libres y notas.
 - **Glosario**: RIR, ROM, MYOreps, dropset y demás términos aparecen como enlaces en el detalle de cada ejercicio.
+- **Entrenamiento en vivo**: "Iniciar entrenamiento" abre una Live Activity con el ejercicio actual en la pantalla de bloqueo y la Dynamic Island (series, repeticiones, descanso, peso y el siguiente). El botón ✓ lo marca como hecho y pasa al siguiente.
 - **Plan**: tu semana de lunes a domingo, con los ejercicios de cada día en carrusel. Toca uno para ver el GIF animado e instrucciones.
 - **Perfil**: nombre, peso, fotos de progreso con comparador, check-in semanal, log de notas y gráficas (calorías estimadas, adherencia, progresión de carga y peso corporal).
 

@@ -3,7 +3,7 @@ import SwiftUI
 
 @main
 struct ChalkApp: App {
-    @State private var store = RoutineStore()
+    @State private var store = AppServices.routineStore
 
     init() {
         FontRegistry.registerBundledFonts()
@@ -16,14 +16,6 @@ struct ChalkApp: App {
                 .environment(\.locale, Locale(identifier: "es_MX"))
                 .environment(\.calendar, .chalk)
         }
-        .modelContainer(for: [
-            WorkoutEntry.self,
-            ExerciseSetting.self,
-            Note.self,
-            MakeupSession.self,
-            UserProfile.self,
-            BodyWeightEntry.self,
-            ProgressPhoto.self,
-        ])
+        .modelContainer(AppServices.modelContainer)
     }
 }
